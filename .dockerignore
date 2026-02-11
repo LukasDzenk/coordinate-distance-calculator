@@ -1,0 +1,72 @@
+# Node dependencies
+node_modules
+.pnpm
+.pnpm-debug.log
+.pnpm-store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+log/
+logs/
+
+# Environment files (never include secrets in the image)
+.env
+.env.*
+
+# Local development
+*.local.*
+*.swp
+*.swo
+*.DS_Store
+*.vscode
+.idea/
+*.code-workspace
+
+# Test files
+__tests__/
+coverage/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+jest.config.js
+vitest.config.ts
+cypress/
+
+# Build output (unless you specifically copy it)
+dist/
+build/
+tmp/
+temp/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker-related
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab/
+.circleci/
+
+# Docs and examples
+README.md
+README
+*.md
+docs/
+examples/
+
+# Other
+render.yaml

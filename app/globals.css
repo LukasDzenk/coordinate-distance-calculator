@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Fora-style: warm paper, deep navy, refined neutrals */
+    --background: 42 33% 98%;
+    --foreground: 28 18% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 28 18% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 28 18% 18%;
+    --primary: 218 32% 22%;
+    --primary-foreground: 42 20% 98%;
+    --secondary: 42 25% 94%;
+    --secondary-foreground: 28 18% 22%;
+    --muted: 42 20% 95%;
+    --muted-foreground: 28 12% 48%;
+    --accent: 42 22% 92%;
+    --accent-foreground: 28 18% 22%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 42 20% 98%;
+    --border: 38 18% 88%;
+    --input: 38 18% 92%;
+    --ring: 218 32% 32%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-serif {
+    font-family: var(--font-serif), Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .animate-out {
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fade-in-0 {
+    animation-name: fadeIn;
+  }
+  .fade-out-0 {
+    animation-name: fadeOut;
+  }
+  .zoom-in-95 {
+    animation-name: zoomIn95;
+  }
+  .zoom-out-95 {
+    animation-name: zoomOut95;
+  }
+  .slide-in-from-top-2 {
+    animation-name: slideInFromTop2;
+  }
+  .slide-in-from-bottom-2 {
+    animation-name: slideInFromBottom2;
+  }
+  .slide-in-from-left-2 {
+    animation-name: slideInFromLeft2;
+  }
+  .slide-in-from-right-2 {
+    animation-name: slideInFromRight2;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes zoomIn95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes zoomOut95 {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+@keyframes slideInFromTop2 {
+  from {
+    transform: translateY(-0.5rem);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes slideInFromBottom2 {
+  from {
+    transform: translateY(0.5rem);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes slideInFromLeft2 {
+  from {
+    transform: translateX(-0.5rem);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideInFromRight2 {
+  from {
+    transform: translateX(0.5rem);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

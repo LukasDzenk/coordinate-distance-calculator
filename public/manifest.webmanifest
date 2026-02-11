@@ -1,0 +1,17 @@
+{
+  "name": "Coordinate Distance Calculator",
+  "short_name": "Coord Distance",
+  "description": "Calculate distance between two coordinates with map and globe visualization, multiple algorithms, units, midpoint, and bearing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
