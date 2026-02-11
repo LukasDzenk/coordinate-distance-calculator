@@ -1,3 +1,5 @@
+[variables]
+NIXPACKS_NODE_VERSION = "24"
 [phases.setup]
 pnpm_version = "10.6.0"
 node_version = "24"
