@@ -371,12 +371,12 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
                 label={t(dict, "modeLabel")}
                 tooltip={t(dict, "tooltipMode")}
               />
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <Button
                 type="button"
                 variant={mode === "globe" ? "default" : "outline"}
                 size="sm"
-                className="flex-1"
+                className="w-full sm:flex-1"
                 onClick={() => setMode("globe")}
               >
                 {t(dict, "modeGlobe")}
@@ -385,7 +385,7 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
                 type="button"
                 variant={mode === "flat" ? "default" : "outline"}
                 size="sm"
-                className="flex-1"
+                className="w-full sm:flex-1"
                 onClick={() => setMode("flat")}
               >
                 {t(dict, "modeFlat")}
@@ -399,12 +399,12 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
                 label={t(dict, "projectionLabel")}
                 tooltip={t(dict, "tooltipProjection")}
               />
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Button
                   type="button"
                   variant={projection === "map" ? "default" : "outline"}
                   size="sm"
-                  className="flex-1"
+                  className="w-full sm:flex-1"
                   onClick={() => setProjection("map")}
                 >
                   {t(dict, "projectionMap")}
@@ -413,7 +413,7 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
                   type="button"
                   variant={projection === "globe" ? "default" : "outline"}
                   size="sm"
-                  className="flex-1"
+                  className="w-full sm:flex-1"
                   onClick={() => setProjection("globe")}
                 >
                   {t(dict, "projectionGlobe")}
