@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             trackOutboundLinks
             trackLocalhost={false}
             scriptProps={
-              { "data-api": "/proxy/api/event" } as React.ComponentPropsWithoutRef<"script">
+              { "data-api": "/proxy/api/event" } as Record<string, string>
             }
           />
         )}
