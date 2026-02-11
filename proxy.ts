@@ -28,6 +28,11 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Plausible proxy route must skip locale redirect so /proxy/api/event is not rewritten
+  if (pathname.startsWith("/proxy/")) {
+    return NextResponse.next();
+  }
+
   const hasLocalePrefix = locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
 
   if (hasLocalePrefix) {
@@ -41,5 +46,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]
+  matcher: ["/((?!api|proxy|_next/static|_next/image|favicon.ico).*)"]
 };
