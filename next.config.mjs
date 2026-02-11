@@ -6,8 +6,11 @@ const nextConfig = {
   typedRoutes: true
 };
 
+const plausibleScriptUrl =
+  process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL ?? "https://plausible-1.matcha-squad.xyz";
+
 const nextConfigWithPlausible = withPlausibleProxy({
-  customDomain: "https://plausible-1.matcha-squad.xyz"
+  customDomain: plausibleScriptUrl
 });
 
 export default nextConfigWithPlausible(nextConfig);

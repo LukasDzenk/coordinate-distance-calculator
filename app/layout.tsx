@@ -35,6 +35,11 @@ export const viewport = {
   themeColor: "#2c3e50",
 };
 
+const plausibleDomain =
+  process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? "coordinatedistance.lukasdzenk.com";
+const plausibleScriptUrl =
+  process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL ?? "https://plausible-1.matcha-squad.xyz";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const isProduction = process.env.NEXT_PUBLIC_APP_ENV === "production";
 
@@ -43,9 +48,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${fontSans.variable} ${fontSerif.variable}`}>
         {isProduction && (
           <PlausibleProvider
-            domain="coordinatedistance.lukasdzenk.com"
+            domain={plausibleDomain}
             selfHosted
-            customDomain="https://plausible-1.matcha-squad.xyz"
+            customDomain={plausibleScriptUrl}
             trackOutboundLinks
             trackLocalhost={false}
           />
