@@ -21,6 +21,7 @@ interface GlobeMapLibreProps {
   algorithmPaths: AlgorithmPath[];
   zoomToPoint?: { lat: number; lon: number } | null;
   zoomFitBoth?: boolean;
+  zoomToCenter?: boolean;
   onZoomComplete?: () => void;
 }
 
@@ -73,6 +74,7 @@ export function GlobeMapLibre({
   algorithmPaths,
   zoomToPoint,
   zoomFitBoth,
+  zoomToCenter,
   onZoomComplete,
 }: GlobeMapLibreProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -265,6 +267,37 @@ export function GlobeMapLibre({
       return;
     }
 
+    if (zoomToCenter && centerPoint) {
+      if (radiusPath && radiusPath.length > 0) {
+        const lngs = radiusPath.map((c) => c.lon);
+        const lats = radiusPath.map((c) => c.lat);
+        try {
+          map.fitBounds(
+            [
+              [Math.min(...lngs), Math.min(...lats)],
+              [Math.max(...lngs), Math.max(...lats)],
+            ],
+            { padding: 48, maxZoom: 14, duration: 400 }
+          );
+        } catch {
+          map.flyTo({
+            center: [centerPoint.lon, centerPoint.lat],
+            zoom: ZOOM_TO_POINT_ZOOM,
+            duration: 400,
+          });
+        }
+      } else {
+        map.flyTo({
+          center: [centerPoint.lon, centerPoint.lat],
+          zoom: ZOOM_TO_POINT_ZOOM,
+          duration: 400,
+        });
+      }
+      skipNextFitBoundsRef.current = true;
+      onZoomComplete?.();
+      return;
+    }
+
     if (zoomFitBoth && pointA && pointB) {
       try {
         map.fitBounds(
@@ -319,7 +352,7 @@ export function GlobeMapLibre({
         (pointA && pointB ? geographicMidpoint(pointA, pointB) : pointA) ?? { lat: 20, lon: 0 };
       map.flyTo({ center: [focus.lon, focus.lat], zoom: DEFAULT_ZOOM, duration: 0 });
     }
-  }, [pointA, pointB, centerPoint, radiusPath, algorithmPaths, mapReady, zoomToPoint, zoomFitBoth]);
+  }, [pointA, pointB, centerPoint, radiusPath, algorithmPaths, mapReady, zoomToPoint, zoomFitBoth, zoomToCenter]);
 
   return (
     <div

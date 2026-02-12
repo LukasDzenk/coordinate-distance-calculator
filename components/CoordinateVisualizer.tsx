@@ -38,6 +38,7 @@ interface CoordinateVisualizerProps {
   algorithmPaths: AlgorithmPath[];
   zoomToPoint?: { lat: number; lon: number } | null;
   zoomFitBoth?: boolean;
+  zoomToCenter?: boolean;
   onZoomComplete?: () => void;
 }
 
@@ -418,6 +419,7 @@ export function CoordinateVisualizer(props: CoordinateVisualizerProps) {
         algorithmPaths={props.algorithmPaths}
         zoomToPoint={props.zoomToPoint}
         zoomFitBoth={props.zoomFitBoth}
+        zoomToCenter={props.zoomToCenter}
         onZoomComplete={props.onZoomComplete}
       />
     );

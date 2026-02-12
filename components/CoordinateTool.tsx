@@ -122,9 +122,9 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
   const [mode, setMode] = useState<CoordinateMode>(() => parseMode(searchParams.get("mode")));
   const [projection, setProjection] = useState<ProjectionMode>(() => parseProjection(searchParams.get("projection")));
   const [pointAInput, setPointAInput] = useState<string>(() =>
-    searchParams.get("a") ?? "37.4219999, -122.0840575"
+    searchParams.get("a") ?? "54.6872, 25.2797"
   );
-  const [pointBInput, setPointBInput] = useState<string>(() => searchParams.get("b") ?? "40.7128, -74.0060");
+  const [pointBInput, setPointBInput] = useState<string>(() => searchParams.get("b") ?? "41.3851, 2.1734");
   const [centerInput, setCenterInput] = useState<string>(() => searchParams.get("center") ?? "");
   const [radiusValue, setRadiusValue] = useState<string>(() => searchParams.get("radius") ?? "0");
   const [outputUnit, setOutputUnit] = useState<OutputUnit>(() => parseOutputUnit(searchParams.get("unit")));
@@ -142,6 +142,7 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
   const [isMapFullscreen, setIsMapFullscreen] = useState(false);
   const [zoomToPoint, setZoomToPoint] = useState<{ lat: number; lon: number } | null>(null);
   const [zoomFitBoth, setZoomFitBoth] = useState(false);
+  const [zoomToCenter, setZoomToCenter] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -365,7 +366,11 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               {t(dict, "heroSubtitle")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-5">
+          <CardContent className="space-y-6">
+            <section className="space-y-4">
+              <h2 className="font-serif text-center text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                {t(dict, "sectionVisualization")}
+              </h2>
             <div className="space-y-2">
               <LabelWithTooltip
                 label={t(dict, "modeLabel")}
@@ -421,7 +426,12 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               </div>
             </div>
           ) : null}
+            </section>
 
+            <section className="space-y-4 border-t border-black/20 pt-6">
+              <h2 className="font-serif text-center text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                {t(dict, "sectionDistance")}
+              </h2>
           <div className="space-y-2">
             <LabelWithTooltip
               htmlFor="point-a"
@@ -545,6 +555,54 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <LabelWithTooltip
+              htmlFor="output-unit"
+              label={t(dict, "outputUnitLabel")}
+              tooltip={t(dict, "tooltipOutputUnit")}
+            />
+            <Select value={outputUnit} onValueChange={(v) => setOutputUnit(v as OutputUnit)}>
+              <SelectTrigger id="output-unit">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.keys(outputUnitLabels) as OutputUnit[]).map((unit) => (
+                  <SelectItem key={unit} value={unit}>
+                    {outputUnitLabels[unit]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {mode === "flat" ? (
+            <div className="space-y-2">
+              <LabelWithTooltip
+                htmlFor="scale"
+                label={t(dict, "scaleLabel")}
+                tooltip={t(dict, "tooltipScale")}
+              />
+              <Input
+                id="scale"
+                type="number"
+                min={0.000001}
+                step="any"
+                value={flatScaleMeters}
+                onChange={(e) => {
+                  const next = Number(e.target.value);
+                  if (Number.isFinite(next) && next > 0) setFlatScaleMeters(next);
+                }}
+              />
+            </div>
+          ) : null}
+
+          <p className="text-xs text-muted-foreground">{t(dict, "parsingHint")}</p>
+            </section>
+
+            <section className="space-y-4 border-t border-black/20 pt-6">
+              <h2 className="font-serif text-center text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                {t(dict, "sectionRadius")}
+              </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <LabelWithTooltip
@@ -588,50 +646,56 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               <p className="text-xs text-muted-foreground">{t(dict, "radiusHint")}</p>
             </div>
           </div>
-
-          <div className="space-y-2">
-            <LabelWithTooltip
-              htmlFor="output-unit"
-              label={t(dict, "outputUnitLabel")}
-              tooltip={t(dict, "tooltipOutputUnit")}
-            />
-            <Select value={outputUnit} onValueChange={(v) => setOutputUnit(v as OutputUnit)}>
-              <SelectTrigger id="output-unit">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(Object.keys(outputUnitLabels) as OutputUnit[]).map((unit) => (
-                  <SelectItem key={unit} value={unit}>
-                    {outputUnitLabels[unit]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {mode === "flat" ? (
-            <div className="space-y-2">
-              <LabelWithTooltip
-                htmlFor="scale"
-                label={t(dict, "scaleLabel")}
-                tooltip={t(dict, "tooltipScale")}
-              />
-              <Input
-                id="scale"
-                type="number"
-                min={0.000001}
-                step="any"
-                value={flatScaleMeters}
-                onChange={(e) => {
-                  const next = Number(e.target.value);
-                  if (Number.isFinite(next) && next > 0) setFlatScaleMeters(next);
+          {mode === "globe" && (
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  setCenterInput("51.8425, 5.8532");
+                  setRadiusValue("10");
+                  setOutputUnit("km");
+                  setZoomToCenter(true);
+                  requestAnimationFrame(() => {
+                    if (window.matchMedia("(min-width: 640px)").matches) {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                      mapContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  });
                 }}
-              />
+              >
+                {t(dict, "loadExampleLabel")}
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                size="sm"
+                className="w-full bg-foreground text-background hover:bg-foreground/90"
+                disabled={!centerParsed?.ok}
+                onClick={() => {
+                  setZoomToCenter(true);
+                  requestAnimationFrame(() => {
+                    if (window.matchMedia("(min-width: 640px)").matches) {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                      mapContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  });
+                }}
+              >
+                {t(dict, "zoomToCenterLabel")}
+              </Button>
             </div>
-          ) : null}
+          )}
+            </section>
 
-          <p className="text-xs text-muted-foreground">{t(dict, "parsingHint")}</p>
-
+            <section className="space-y-4 border-t border-black/20 pt-6">
+              <h2 className="font-serif text-center text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                {t(dict, "sectionSharing")}
+              </h2>
           <div className="space-y-2 rounded-xl border border-border/80 bg-muted/30 p-4">
             <div className="flex items-center gap-2">
               <Button
@@ -672,6 +736,7 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               {sharePath}
             </code>
           </div>
+            </section>
         </CardContent>
       </Card>
 
@@ -745,9 +810,11 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               algorithmPaths={algorithmPaths}
               zoomToPoint={zoomToPoint}
               zoomFitBoth={zoomFitBoth}
+              zoomToCenter={zoomToCenter}
               onZoomComplete={() => {
                 setZoomToPoint(null);
                 setZoomFitBoth(false);
+                setZoomToCenter(false);
               }}
             />
           </div>
@@ -778,6 +845,17 @@ export function CoordinateTool({ dict }: CoordinateToolProps) {
               >
                 {t(dict, "zoomToPointBLabel")}
               </Button>
+              {centerParsed?.ok && "lat" in centerParsed.value && (
+                <Button
+                  type="button"
+                  variant="default"
+                  size="sm"
+                  className="bg-foreground text-background hover:bg-foreground/90"
+                  onClick={() => setZoomToCenter(true)}
+                >
+                  {t(dict, "zoomToCenterLabel")}
+                </Button>
+              )}
               <Button
                 type="button"
                 variant="outline"
