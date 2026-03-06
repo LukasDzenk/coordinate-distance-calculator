@@ -65,6 +65,19 @@ function buildOSMStyle(projectionMode: "map" | "globe"): StyleSpecification {
 
 const ZOOM_TO_POINT_ZOOM = 12;
 
+function isWebGLSupported(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      canvas.getContext("webgl2") ??
+      canvas.getContext("webgl") ??
+      canvas.getContext("experimental-webgl")
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function GlobeMapLibre({
   projectionMode,
   pointA,
@@ -80,20 +93,32 @@ export function GlobeMapLibre({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [webGLError, setWebGLError] = useState(false);
   const skipNextFitBoundsRef = useRef(false);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    if (!isWebGLSupported()) {
+      setWebGLError(true);
+      return;
+    }
+
     const style = buildOSMStyle(projectionMode);
 
-    const map = new maplibregl.Map({
-      container,
-      style,
-      center: DEFAULT_CENTER,
-      zoom: DEFAULT_ZOOM,
-    });
+    let map: maplibregl.Map;
+    try {
+      map = new maplibregl.Map({
+        container,
+        style,
+        center: DEFAULT_CENTER,
+        zoom: DEFAULT_ZOOM,
+      });
+    } catch {
+      setWebGLError(true);
+      return;
+    }
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
 
@@ -353,6 +378,18 @@ export function GlobeMapLibre({
       map.flyTo({ center: [focus.lon, focus.lat], zoom: DEFAULT_ZOOM, duration: 0 });
     }
   }, [pointA, pointB, centerPoint, radiusPath, algorithmPaths, mapReady, zoomToPoint, zoomFitBoth, zoomToCenter]);
+
+  if (webGLError) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-muted/50 text-muted-foreground text-sm p-6 text-center">
+        <p>
+          Interactive map unavailable — your browser or environment does not
+          support WebGL. Try enabling hardware acceleration in your browser
+          settings.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div
