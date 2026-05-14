@@ -1,0 +1,6 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+engineStrict: true
+resolutionMode: highest
+shamefullyHoist: true
