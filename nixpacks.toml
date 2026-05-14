@@ -8,5 +8,5 @@ node_version = "24"
 cmds = [
   "npm install -g corepack@0.34.7",
   "corepack enable",
-  "pnpm i --frozen-lockfile",
+  "pnpm i --frozen-lockfile --prod=false",
 ]
