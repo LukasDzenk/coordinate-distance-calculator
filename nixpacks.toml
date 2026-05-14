@@ -1,5 +1,12 @@
 [variables]
 NIXPACKS_NODE_VERSION = "24"
+
 [phases.setup]
-pnpm_version = "10.6.0"
 node_version = "24"
+
+[phases.install]
+cmds = [
+  "npm install -g corepack@0.34.7",
+  "corepack enable",
+  "pnpm i --frozen-lockfile",
+]

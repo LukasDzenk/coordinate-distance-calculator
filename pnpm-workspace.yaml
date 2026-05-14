@@ -4,3 +4,4 @@ allowBuilds:
 engineStrict: true
 resolutionMode: highest
 shamefullyHoist: true
+minimumReleaseAge: 10080
