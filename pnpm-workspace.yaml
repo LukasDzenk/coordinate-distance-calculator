@@ -5,3 +5,18 @@ engineStrict: true
 resolutionMode: highest
 shamefullyHoist: true
 minimumReleaseAge: 10080
+# Version-scoped exemptions for the Next 16.3.0 release (published inside
+# the 7-day window); remove once it has aged past the gate.
+minimumReleaseAgeExclude:
+  - next@16.3.0
+  - eslint-config-next@16.3.0
+  - '@next/env@16.3.0'
+  - '@next/eslint-plugin-next@16.3.0'
+  - '@next/swc-darwin-arm64@16.3.0'
+  - '@next/swc-darwin-x64@16.3.0'
+  - '@next/swc-linux-arm64-gnu@16.3.0'
+  - '@next/swc-linux-arm64-musl@16.3.0'
+  - '@next/swc-linux-x64-gnu@16.3.0'
+  - '@next/swc-linux-x64-musl@16.3.0'
+  - '@next/swc-win32-arm64-msvc@16.3.0'
+  - '@next/swc-win32-x64-msvc@16.3.0'
